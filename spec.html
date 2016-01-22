@@ -10558,12 +10558,12 @@ a = b + c
       <emu-see-also-para op="IsValidSimpleAssignmentTarget"></emu-see-also-para>
       <emu-grammar>IdentifierReference : Identifier</emu-grammar>
       <emu-alg>
-        1. If this |IdentifierReference| is contained in strict mode code and StringValue of |Identifier| is `"eval"` or `"arguments"`, return *false*.
-        1. Return *true*.
+        1. If this |IdentifierReference| is contained in strict mode code and StringValue of |Identifier| is `"eval"` or `"arguments"`, return ~strict~.
+        1. Return ~simple~.
       </emu-alg>
       <emu-grammar>IdentifierReference : `yield`</emu-grammar>
       <emu-alg>
-        1. Return *true*.
+        1. Return ~simple~.
       </emu-alg>
     </emu-clause>
 
@@ -10770,7 +10770,7 @@ a = b + c
             TemplateLiteral
         </emu-grammar>
         <emu-alg>
-          1. Return *false*.
+          1. Return ~invalid~.
         </emu-alg>
         <emu-grammar>PrimaryExpression : CoverParenthesizedExpressionAndArrowParameterList</emu-grammar>
         <emu-alg>
@@ -11737,7 +11737,7 @@ a = b + c
             SuperProperty
         </emu-grammar>
         <emu-alg>
-          1. Return *true*.
+          1. Return ~simple~.
         </emu-alg>
         <emu-grammar>
           CallExpression :
@@ -11757,7 +11757,7 @@ a = b + c
             `new` `.` `target`
         </emu-grammar>
         <emu-alg>
-          1. Return *false*.
+          1. Return ~invalid~.
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -12121,7 +12121,10 @@ a = b + c
       </emu-grammar>
       <ul>
         <li>
-          It is an early Reference Error if IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is *false*.
+          It is an early Reference Error if IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is ~invalid~.
+        </li>
+        <li>
+          It is an early Syntax Error if IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is ~strict~.
         </li>
       </ul>
     </emu-clause>
@@ -12150,7 +12153,7 @@ a = b + c
           LeftHandSideExpression `--`
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -12219,7 +12222,10 @@ a = b + c
       </emu-grammar>
       <ul>
         <li>
-          It is an early Reference Error if IsValidSimpleAssignmentTarget of |UnaryExpression| is *false*.
+          It is an early Reference Error if IsValidSimpleAssignmentTarget of |UnaryExpression| is ~invalid~.
+        </li>
+        <li>
+          It is an early Syntax Error if IsValidSimpleAssignmentTarget of |UnaryExpression| is ~strict~.
         </li>
       </ul>
     </emu-clause>
@@ -12262,7 +12268,7 @@ a = b + c
           `!` UnaryExpression
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -12589,7 +12595,7 @@ a = b + c
       <emu-see-also-para op="IsValidSimpleAssignmentTarget"></emu-see-also-para>
       <emu-grammar>MultiplicativeExpression : MultiplicativeExpression MultiplicativeOperator UnaryExpression</emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -12737,7 +12743,7 @@ a = b + c
           AdditiveExpression `-` MultiplicativeExpression
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -12872,7 +12878,7 @@ a = b + c
           ShiftExpression `&gt;&gt;&gt;` AdditiveExpression
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -13002,7 +13008,7 @@ a = b + c
           RelationalExpression `in` ShiftExpression
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -13130,7 +13136,7 @@ a = b + c
           EqualityExpression `!==` RelationalExpression
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -13259,7 +13265,7 @@ a = b + c
         BitwiseORExpression : BitwiseORExpression `|` BitwiseXORExpression
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -13320,7 +13326,7 @@ a = b + c
         LogicalORExpression : LogicalORExpression `||` LogicalANDExpression
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -13377,7 +13383,7 @@ a = b + c
       <emu-see-also-para op="IsValidSimpleAssignmentTarget"></emu-see-also-para>
       <emu-grammar>ConditionalExpression : LogicalORExpression `?` AssignmentExpression `:` AssignmentExpression</emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -13423,13 +13429,19 @@ a = b + c
           It is a Syntax Error if |LeftHandSideExpression| is either an |ObjectLiteral| or an |ArrayLiteral| and the lexical token sequence matched by |LeftHandSideExpression| cannot be parsed with no tokens left over using |AssignmentPattern| as the goal symbol.
         </li>
         <li>
-          It is an early Reference Error if |LeftHandSideExpression| is neither an |ObjectLiteral| nor an |ArrayLiteral| and IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is *false*.
+          It is an early Reference Error if |LeftHandSideExpression| is neither an |ObjectLiteral| nor an |ArrayLiteral| and IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is ~invalid~.
+        </li>
+        <li>
+          It is an early Syntax Error if |LeftHandSideExpression| is neither an |ObjectLiteral| nor an |ArrayLiteral| and IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is ~strict~.
         </li>
       </ul>
       <emu-grammar>AssignmentExpression : LeftHandSideExpression AssignmentOperator AssignmentExpression</emu-grammar>
       <ul>
         <li>
-          It is an early Reference Error if IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is *false*.
+          It is an early Reference Error if IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is ~invalid~.
+        </li>
+        <li>
+          It is an early Syntax Error if IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is ~strict~.
         </li>
       </ul>
     </emu-clause>
@@ -13465,7 +13477,7 @@ a = b + c
           LeftHandSideExpression AssignmentOperator AssignmentExpression
       </emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -13558,7 +13570,7 @@ a = b + c
         <emu-grammar>AssignmentProperty : IdentifierReference Initializer?</emu-grammar>
         <ul>
           <li>
-            It is a Syntax Error if IsValidSimpleAssignmentTarget of |IdentifierReference| is *false*.
+            It is a Syntax Error if IsValidSimpleAssignmentTarget of |IdentifierReference| is not ~simple~.
           </li>
         </ul>
         <emu-grammar>DestructuringAssignmentTarget : LeftHandSideExpression</emu-grammar>
@@ -13567,7 +13579,7 @@ a = b + c
             It is a Syntax Error if |LeftHandSideExpression| is either an |ObjectLiteral| or an |ArrayLiteral| and if the lexical token sequence matched by |LeftHandSideExpression| cannot be parsed with no tokens left over using |AssignmentPattern| as the goal symbol.
           </li>
           <li>
-            It is a Syntax Error if |LeftHandSideExpression| is neither an |ObjectLiteral| nor an |ArrayLiteral| and IsValidSimpleAssignmentTarget(|LeftHandSideExpression|) is *false*.
+            It is a Syntax Error if |LeftHandSideExpression| is neither an |ObjectLiteral| nor an |ArrayLiteral| and IsValidSimpleAssignmentTarget(|LeftHandSideExpression|) is not ~simple~.
           </li>
         </ul>
       </emu-clause>
@@ -13821,7 +13833,7 @@ a = b + c
       <emu-see-also-para op="IsValidSimpleAssignmentTarget"></emu-see-also-para>
       <emu-grammar>Expression : Expression `,` AssignmentExpression</emu-grammar>
       <emu-alg>
-        1. Return *false*.
+        1. Return ~invalid~.
       </emu-alg>
     </emu-clause>
 
@@ -15720,7 +15732,7 @@ eval("1;var a;")
         <p>If |LeftHandSideExpression| is either an |ObjectLiteral| or an |ArrayLiteral| and if the lexical token sequence matched by |LeftHandSideExpression| can be parsed with no tokens left over using |AssignmentPattern| as the goal symbol then the following rules are not applied. Instead, the Early Error rules for |AssignmentPattern| are used.</p>
         <ul>
           <li>
-            It is a Syntax Error if IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is *false*.
+            It is a Syntax Error if IsValidSimpleAssignmentTarget of |LeftHandSideExpression| is not ~simple~.
           </li>
           <li>
             It is a Syntax Error if the |LeftHandSideExpression| is <emu-grammar>CoverParenthesizedExpressionAndArrowParameterList : `(` Expression `)`</emu-grammar> and |Expression| derives a production that would produce a Syntax Error according to these rules if that production is substituted for |LeftHandSideExpression|. This rule is recursively applied.
